@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Spyder Editor
-
-This is a temporary script file.
+Author = Chaidar
 """
 
 import netCDF4
 import pandas as pd 
 
-data = netCDF4.Dataset("G:\My Drive\SKRIPSIAN\program\python\edit.nc")
+data = netCDF4.Dataset("path to your netCDF data")
+#see the all data variable
 print(data.variables.keys())
-
+#call the data
 lat = data.variables['latitude'][:]
 lon = data.variables['longitude'][:]
 thetao = data.variables['thetao'][:]
@@ -22,15 +21,15 @@ time = data.variables['time']
 dtime = netCDF4.num2date(time[:],time.units)
 nlon = len(lon)
 nlat = len(lat)
-
+#make empty list data variable
 bottomTlist = []
 zoslist = []
 latlist = []
 lonlist = []
 timelist= []
 
-
 print('convert bottomT and zos')
+#access data and add data to the list
 for i in range(len(dtime)):
     utime = dtime[i]
     for j in range(nlat):
@@ -44,9 +43,12 @@ for i in range(len(dtime)):
             lonlist.append(ulon)
             bottomTlist.append(ubottomT)
             zoslist.append(uzos)
+#compile all data to dictionary
 udata = {'time':timelist, 'latitude':latlist, 'longitude':lonlist,
          'bottomT': bottomTlist, 'zos': zoslist}
+#make a dataframe
 df = pd.DataFrame(udata)
+#save to CSV
 df.to_csv('bottomT.csv', index = True, header = True)
 
 latlist = []
